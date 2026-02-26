@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>题解 · CookieOI[2026.01] Div.1</title>
+    <link rel="icon" href="https://cookieoj.github.io/image/Logo-removebg.png" type="image/png">
+    <link rel="shortcut icon" href="https://cookieoj.github.io/image/Logo-removebg.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        :root {
+            --primary: #1e40af;
+            --primary-light: #3b82f6;
+            --secondary: #0f766e;
+            --accent: #ef4444;
+            --light: #f8fafc;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* 导航栏 */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 1.05rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+            font-weight: 600;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 5px;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--dark);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* 主要内容 */
+        main {
+            margin-top: 70px;
+        }
+
+        /* 英雄区域 */
+        .hero {
+            padding: 5rem 0 3rem;
+            text-align: center;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+        }
+
+        /* 卡片通用设计 */
+        .contest-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            margin-bottom: 3rem;
+            border: 1px solid var(--border);
+        }
+
+        .contest-header {
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .contest-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .contest-badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .contest-body {
+            padding: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid var(--border);
+            font-weight: 600;
+        }
+
+        /* 题目列表 */
+        .problems-list {
+            margin-bottom: 2.5rem;
+        }
+
+        .problem-item {
+            display: flex;
+            align-items: center;
+            padding: 1.2rem;
+            border-bottom: 1px solid var(--border);
+            transition: background-color 0.2s;
+            flex-wrap: wrap; /* 为移动端做准备 */
+        }
+
+        .problem-item:hover {
+            background-color: #f8fafc;
+        }
+
+        .problem-item:last-child {
+            border-bottom: none;
+        }
+
+        .problem-order {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .problem-content {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .problem-title {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: var(--dark);
+        }
+
+        .problem-meta {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .problem-difficulty {
+            padding: 0.2rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .difficulty-easy {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .difficulty-medium {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .difficulty-hard {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* 按钮 */
+        .btn {
+            padding: 1rem 2.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* 小按钮用于题解入口 */
+        .btn-sm {
+            padding: 0.6rem 1.5rem;
+            font-size: 0.95rem;
+            border-radius: 6px;
+            margin-left: auto;      /* 在大屏幕上靠右 */
+            flex-shrink: 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        /* 页脚 */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-column h4 {
+            font-size: 1.2rem;
+            margin-bottom: 1.2rem;
+            color: white;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.4rem;
+            }
+            .contest-title {
+                font-size: 1.6rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                padding: 1rem 0;
+                box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-links li {
+                margin: 0;
+                text-align: center;
+                padding: 0.8rem 0;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .hero {
+                padding: 3rem 0 2rem;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .contest-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .action-buttons {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .contest-body {
+                padding: 1.5rem;
+            }
+            .problem-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .problem-order {
+                margin-bottom: 1rem;
+                margin-right: 0;
+            }
+            .problem-meta {
+                flex-wrap: wrap;
+                gap: 0.8rem;
+            }
+            /* 小按钮在移动端左对齐并占满 */
+            .btn-sm {
+                margin-left: 0;
+                margin-top: 1rem;
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 (保持风格, 当前激活页设为题解向导) -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <i class="fas fa-code logo-icon"></i>
+                CookieOI
+            </a>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#" class="active">题解</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <!-- 英雄区域 (调整为题解向导说明) -->
+        <section class="hero">
+            <div class="container">
+                <h1>CookieOI[2026.01] Div.1 · 题解</h1>
+                <p class="hero-subtitle">
+                </p>
+            </div>
+        </section>
+
+        <div class="container">
+            <!-- 题解卡片 (风格完全匹配原比赛卡片) -->
+            <section class="contest-card">
+                <div class="contest-header">
+                    <div class="contest-title">题解入口</div>
+                    <div class="contest-badge">A · B · C · D</div>
+                </div>
+
+                <div class="contest-body">
+                    <h3 class="section-title">题目列表 & 题解跳转</h3>
+
+                    <div class="problems-list">
+                        <!-- 题目 A: Poker -->
+                        <div class="problem-item">
+                            <div class="problem-order">A</div>
+                            <div class="problem-content">
+                                <div class="problem-title">Poker</div>
+                                <div class="problem-meta">
+                                    <span>时间限制：1000ms</span>
+                                    <span>内存限制：512MB</span>
+                                    <span class="problem-difficulty difficulty-easy">普及-</span>
+                                </div>
+                            </div>
+                            <!-- 题解跳转链接 (模拟真实路径, 新窗口打开) -->
+                            <a href="https://CookieOJ.github.io/solutions/1/A" class="btn btn-primary btn-sm" target="_blank" rel="noopener">
+                                <i class="fas fa-book-open"></i> 查看题解
+                            </a>
+                        </div>
+
+                        <!-- 题目 B: Airplane -->
+                        <div class="problem-item">
+                            <div class="problem-order">B</div>
+                            <div class="problem-content">
+                                <div class="problem-title">Airplane</div>
+                                <div class="problem-meta">
+                                    <span>时间限制：1000ms</span>
+                                    <span>内存限制：125MB</span>
+                                    <span class="problem-difficulty difficulty-medium">普及+</span>
+                                </div>
+                            </div>
+                            <a href="https://CookieOJ.github.io/solutions/1/B" class="btn btn-primary btn-sm" target="_blank" rel="noopener">
+                                <i class="fas fa-book-open"></i> 查看题解
+                            </a>
+                        </div>
+
+                        <!-- 题目 C: Tower -->
+                        <div class="problem-item">
+                            <div class="problem-order">C</div>
+                            <div class="problem-content">
+                                <div class="problem-title">Tower</div>
+                                <div class="problem-meta">
+                                    <span>时间限制：1000ms</span>
+                                    <span>内存限制：128MB</span>
+                                    <span class="problem-difficulty difficulty-medium">提高-</span>
+                                </div>
+                            </div>
+                            <a href="https://CookieOJ.github.io/solutions/1/C" class="btn btn-primary btn-sm" target="_blank" rel="noopener">
+                                <i class="fas fa-book-open"></i> 查看题解
+                            </a>
+                        </div>
+
+                        <!-- 题目 D: Puyo -->
+                        <div class="problem-item">
+                            <div class="problem-order">D</div>
+                            <div class="problem-content">
+                                <div class="problem-title">Puyo</div>
+                                <div class="problem-meta">
+                                    <span>时间限制：1000ms</span>
+                                    <span>内存限制：125MB</span>
+                                    <span class="problem-difficulty difficulty-hard">提高+</span>
+                                </div>
+                            </div>
+                            <a href="https://CookieOJ.github.io/solutions/1/D" class="btn btn-primary btn-sm" target="_blank" rel="noopener">
+                                <i class="fas fa-book-open"></i> 查看题解
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- 额外操作链接：返回比赛主页 / 查看排名 (风格一致) -->
+                    <div class="action-buttons">
+                        <a href="https://CookieOJ.github.io/contest/1" class="btn btn-secondary" target="_blank">
+                            <i class="fas fa-arrow-left"></i> 返回比赛主页
+                        </a>
+                        <a href="https://CookieOJ.github.io/contest/1/scoretable.html" class="btn btn-secondary" target="_blank">
+                            <i class="fas fa-chart-bar"></i> 查看实时排名
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 为了完全保持风格，移除了原规则和往期比赛，只保留核心题解卡片，也可以根据需要添加简洁提示 -->
+            <section style="text-align: center; margin: 2rem 0 3rem; color: var(--gray);">
+                <i class="fas fa-code-branch"></i> 题解还可以通过OJ系统/曲奇博客查看
+            </section>
+        </div>
+    </main>
+
+    <!-- 页脚 (与原页面一致) -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>CookieOI</h4>
+                    <p>这是CookieOJ举办的第一场月赛，也希望通过这场月赛的选手反馈改善比赛机制和赛题选择。Cookie月赛[2026.1]共有一个div(div.1)，包含题目A~D。本页面为官方题解向导。</p>
+                </div>
+                <div class="footer-column">
+                    <h4>联系我们</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Email: JackyHuang_ses@outlook.com</a></li>
+                        <li><a href="#">QQ群: 无</a></li>
+                        <li><a href="https://github.com/CookieOJ">GitHub: @CookieOJ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 CookieOI · 题解</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 仅保留移动端菜单切换 + 平滑滚动 (移除所有倒计时及比赛状态更新)
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            
+            // 切换菜单图标
+            const icon = mobileMenuBtn.querySelector('i');
+            if (icon.classList.contains('fa-bars')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+        
+        // 点击导航链接后关闭移动菜单
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.querySelector('i').classList.remove('fa-times');
+                mobileMenuBtn.querySelector('i').classList.add('fa-bars');
+            });
+        });
+        
+        // 平滑滚动 (保留, 对页内锚点有效, 本页没有使用, 但保留无妨)
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if(href === '#' || href === '') return;
+                
+                const targetElement = document.querySelector(href);
+                if(targetElement) {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // 所有指向外部题解链接的按钮默认新标签打开，不作额外处理
+        // 控制台不会报错，因为原倒计时相关DOM已移除，相关函数也未调用
+    </script>
+</body>
+</html>

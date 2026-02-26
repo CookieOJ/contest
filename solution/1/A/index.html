@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A · CookieOI[2026.01] Div.1</title>
+    <link rel="icon" href="https://cookieoj.github.io/image/Logo-removebg.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入 marked.js 和 highlight.js 核心库 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- 引入 KaTeX 用于渲染 LaTeX 数学公式 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+    <style>
+        /* ========== 全局样式（保持原比赛风格） ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        :root {
+            --primary: #1e40af;
+            --primary-light: #3b82f6;
+            --secondary: #0f766e;
+            --accent: #ef4444;
+            --light: #f8fafc;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --border: #e2e8f0;
+            --code-bg: #f1f5f9;
+        }
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo-icon { color: var(--accent); }
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        .nav-links li { margin-left: 2rem; }
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 1.05rem;
+        }
+        .nav-links a:hover { color: var(--primary); }
+        .nav-links a.active {
+            color: var(--primary);
+            font-weight: 600;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 5px;
+        }
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--dark);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        main { margin-top: 70px; }
+        .hero {
+            padding: 5rem 0 3rem;
+            text-align: center;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        }
+        .hero h1 {
+            font-size: 2.8rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        .contest-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            overflow: hidden;
+            margin-bottom: 3rem;
+            border: 1px solid var(--border);
+        }
+        .contest-header {
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .contest-title { font-size: 1.8rem; font-weight: 700; }
+        .contest-badge {
+            background-color: rgba(255,255,255,0.2);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .contest-body { padding: 2.5rem; }
+
+        /* ========== Markdown 渲染区域样式 ========== */
+        .markdown-body {
+            color: var(--dark);
+        }
+        .markdown-body h1, .markdown-body h2, .markdown-body h3 {
+            color: var(--dark);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .markdown-body h1 {
+            font-size: 2rem;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 0.5rem;
+        }
+        .markdown-body h2 {
+            font-size: 1.6rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.3rem;
+        }
+        .markdown-body h3 { font-size: 1.3rem; color: var(--primary); }
+        .markdown-body p { margin-bottom: 1.2rem; }
+        .markdown-body ul, .markdown-body ol { margin: 1rem 0 1.5rem 2rem; }
+        .markdown-body li { margin-bottom: 0.3rem; }
+
+        /* ========== 代码块样式（强制字体 + 内联高亮颜色） ========== */
+        .markdown-body pre {
+            background-color: var(--code-bg);
+            border-radius: 8px;
+            padding: 1.2rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+        /* 强制所有 code 使用 Courier New，包括高亮后的 .hljs 类 */
+        .markdown-body pre code,
+        .markdown-body code,
+        .markdown-body .hljs,
+        .hljs,
+        [class*="hljs-"] {
+            font-family: 'Courier New', Courier, monospace !important;
+        }
+        .markdown-body pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        /* ========== 高亮颜色定义（完全自包含，不依赖外部 CDN） ========== */
+        .hljs {
+            display: block;
+            overflow-x: auto;
+            color: #24292e;  /* 基础文字颜色 */
+        }
+        .hljs-comment,
+        .hljs-quote { color: #6a737d; font-style: italic; }
+        .hljs-keyword,
+        .hljs-selector-tag,
+        .hljs-subst { color: #d73a49; font-weight: bold; }
+        .hljs-number,
+        .hljs-literal,
+        .hljs-variable,
+        .hljs-template-variable,
+        .hljs-tag .hljs-attr { color: #005cc5; }
+        .hljs-string,
+        .hljs-doctag { color: #032f62; }
+        .hljs-title,
+        .hljs-section,
+        .hljs-selector-id { color: #6f42c1; }
+        .hljs-type,
+        .hljs-class .hljs-title { color: #6f42c1; }
+        .hljs-tag,
+        .hljs-name,
+        .hljs-attribute { color: #22863a; }
+        .hljs-regexp,
+        .hljs-link { color: #009926; }
+        .hljs-symbol,
+        .hljs-bullet { color: #e36209; }
+        .hljs-built_in,
+        .hljs-builtin-name { color: #e36209; }
+        .hljs-meta { color: #2b5581; }
+        .hljs-deletion { background: #ffdce0; }
+        .hljs-addition { background: #dbedff; }
+        .hljs-emphasis { font-style: italic; }
+        .hljs-strong { font-weight: bold; }
+
+        /* ========== 其他组件样式 ========== */
+        .loading, .error {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+            font-size: 1.2rem;
+        }
+        .error { color: var(--accent); }
+        .btn {
+            padding: 1rem 2.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+        .btn-secondary:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+            margin-top: 2rem;
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                padding: 1rem 0;
+                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            }
+            .nav-links.active { display: flex; }
+            .nav-links li { margin: 0; text-align: center; padding: 0.8rem 0; }
+            .mobile-menu-btn { display: block; }
+            .hero h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo"><i class="fas fa-code logo-icon"></i>CookieOI</a>
+            <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#" class="active">题解</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>CookieOI[2026.01] Div.1 · A</h1>
+            </div>
+        </section>
+
+        <div class="container">
+            <section class="contest-card">
+                <div class="contest-header">
+                    <div class="contest-title">Poker</div>
+                    <div class="contest-badge">A</div>
+                </div>
+                <div class="contest-body">
+                    <div id="markdown-container" class="markdown-body">
+                        <div class="loading"><i class="fas fa-spinner fa-pulse"></i> 正在加载题解...</div>
+                    </div>
+                </div>
+                <div style="padding: 0 2.5rem 2.5rem; text-align: center;">
+                    <a href="https://CookieOJ.github.io/contest/solution/1" class="btn btn-secondary" target="_blank">
+                        <i class="fas fa-arrow-left"></i> 返回题解主页
+                    </a>
+                    <a href="#" class="btn btn-primary" style="margin-left: 1rem;" onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;">
+                        <i class="fas fa-arrow-up"></i> 返回顶部
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container"><div class="copyright"><p>&copy; 2026 CookieOI · A</p></div></div>
+    </footer>
+
+    <script>
+        // 移动端菜单
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = mobileMenuBtn.querySelector('i');
+            if (icon.classList.contains('fa-bars')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.querySelector('i').classList.remove('fa-times');
+                mobileMenuBtn.querySelector('i').classList.add('fa-bars');
+            });
+        });
+
+        // 加载并渲染 solution.md
+        (async function loadMarkdown() {
+            const container = document.getElementById('markdown-container');
+            try {
+                const response = await fetch('solution.md');
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const markdown = await response.text();
+                // 使用 marked 解析
+                const html = marked.parse(markdown);
+                container.innerHTML = html;
+                
+                // 应用代码高亮
+                container.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightElement(block);
+                });
+                // 确保 hljs 类存在
+                container.querySelectorAll('pre code').forEach((block) => {
+                    if (!block.classList.contains('hljs')) {
+                        block.classList.add('hljs');
+                    }
+                });
+
+                // 渲染 LaTeX 数学公式（使用 KaTeX auto-render）
+                if (typeof renderMathInElement === 'function') {
+                    renderMathInElement(container, {
+                        delimiters: [
+                            { left: '$$', right: '$$', display: true },   // 块级公式
+                            { left: '$', right: '$', display: false }     // 行内公式
+                        ],
+                        ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'], // 忽略代码块
+                        throwOnError: false
+                    });
+                } else {
+                    console.warn('KaTeX auto-render not loaded');
+                }
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="error">
+                        <i class="fas fa-exclamation-triangle"></i> 加载失败：${error.message}<br>
+                        请确保 <code>solution.md</code> 文件存在于同目录下，并通过本地服务器访问（而非直接打开文件）。
+                    </div>
+                `;
+            }
+        })();
+    </script>
+    <!-- 重要：必须通过本地服务器访问，否则 fetch 会被浏览器阻止 -->
+</body>
+</html>
