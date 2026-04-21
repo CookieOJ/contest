@@ -642,7 +642,7 @@
 
             <!-- 比赛网格 -->
             <div class="contests-grid" id="contestsGrid">
-                <div class="contest-card" data-status="ended" data-type="monthly">
+                <div class="contest-card" data-type="monthly" data-start="2026-03-01" data-end="2026-03-31">
                     <div class="contest-card-header">
                         <div>
                             <div class="contest-title">CookieOI[2026.03] Div.1</div>
@@ -684,7 +684,7 @@
 
 
                 <!-- 月赛示例 -->
-                <div class="contest-card" data-status="ended" data-type="monthly">
+                <div class="contest-card" data-type="monthly" data-start="2026-01-01" data-end="2026-01-31">
                     <div class="contest-card-header">
                         <div>
                             <div class="contest-title">CookieOI[2026.01] Div.1</div>
@@ -725,13 +725,13 @@
                 </div>
 
                 <!-- 周赛示例 -->
-                <div class="contest-card" data-status="upcoming" data-type="weekly">
+                <div class="contest-card" data-type="weekly" data-start="2026-05-01" data-end="2026-05-01">
                     <div class="contest-card-header">
                         <div>
                             <div class="contest-title">CookieOI 测试周赛</div>
                             <div class="meta-item">
                                 <i class="far fa-calendar-alt"></i>
-                                <span>--</span>
+                                <span>2026年5月1日</span>
                             </div>
                         </div>
                         <div class="contest-badge badge-weekly">周赛</div>
@@ -740,7 +740,7 @@
                         <div class="contest-meta">
                             <div class="meta-item">
                                 <i class="fas fa-trophy"></i>
-                                <span>--</span>
+                                <span>IOI赛制 · 4道题目</span>
                             </div>
                         </div>
                         <p class="contest-description">Cookie Online Judge 测试周赛</p>
@@ -766,13 +766,13 @@
                 </div>
 
                 <!-- 专题赛示例 -->
-                <div class="contest-card" data-status="ongoing" data-type="special">
+                <div class="contest-card" data-type="special" data-start="2026-04-20" data-end="2026-04-22">
                     <div class="contest-card-header">
                         <div>
                             <div class="contest-title">CookieOI 测试活动赛</div>
                             <div class="meta-item">
                                 <i class="far fa-calendar-alt"></i>
-                                <span>--</span>
+                                <span>2026年4月20日 - 2026年4月22日</span>
                             </div>
                         </div>
                         <div class="contest-badge badge-special">活动赛</div>
@@ -781,7 +781,7 @@
                         <div class="contest-meta">
                             <div class="meta-item">
                                 <i class="fas fa-trophy"></i>
-                                <span>--</span>
+                                <span>IOI赛制 · 4道题目</span>
                             </div>
                         </div>
                         <p class="contest-description">Cookie Online Judge 测试活动赛</p>
@@ -807,13 +807,13 @@
                 </div>
 
                 <!-- 已结束比赛示例 -->
-                <div class="contest-card" data-status="ended" data-type="monthly">
+                <div class="contest-card" data-type="monthly" data-start="2026-04-01" data-end="2026-04-15">
                     <div class="contest-card-header">
                         <div>
                             <div class="contest-title">CookieOI 测试月赛</div>
                             <div class="meta-item">
                                 <i class="far fa-calendar-alt"></i>
-                                <span>--</span>
+                                <span>2026年4月1日 - 2026年4月15日</span>
                             </div>
                         </div>
                         <div class="contest-badge badge-ended">已结束</div>
@@ -822,7 +822,7 @@
                         <div class="contest-meta">
                             <div class="meta-item">
                                 <i class="fas fa-trophy"></i>
-                                <span>--</span>
+                                <span>IOI赛制 · 4道题目</span>
                             </div>
                         </div>
                         <p class="contest-description">Cookie Online Judge 测试月赛</p>
@@ -981,21 +981,48 @@
         
         // 更新比赛状态标签
         function updateContestStatus() {
-            // 更新比赛状态标签
+            const now = new Date('2026-04-21');
             document.querySelectorAll('.contest-card').forEach(card => {
-                const status = card.getAttribute('data-status');
-                const badge = card.querySelector('.contest-badge');
+                const startStr = card.getAttribute('data-start');
+                const endStr = card.getAttribute('data-end');
+                const type = card.getAttribute('data-type');
+                const start = new Date(startStr);
+                const end = new Date(endStr);
+                const fiveDaysBefore = new Date(start);
+                fiveDaysBefore.setDate(start.getDate() - 5);
                 
-                if (status === 'ongoing') {
-                    badge.classList.remove('badge-upcoming', 'badge-ended');
-                    badge.classList.add('badge-ongoing');
-                } else if (status === 'upcoming') {
-                    badge.classList.remove('badge-ongoing', 'badge-ended');
-                    badge.classList.add('badge-upcoming');
-                } else if (status === 'ended') {
-                    badge.classList.remove('badge-ongoing', 'badge-upcoming');
-                    badge.classList.add('badge-ended');
+                let status, badgeText, badgeClass;
+                
+                if (now > end) {
+                    status = 'ended';
+                    badgeText = '已结束';
+                    badgeClass = 'badge-ended';
+                } else if (now >= start) {
+                    status = 'ongoing';
+                    badgeText = '进行中';
+                    badgeClass = 'badge-ongoing';
+                } else if (now >= fiveDaysBefore) {
+                    status = 'upcoming';
+                    badgeText = '即将开始';
+                    badgeClass = 'badge-upcoming';
+                } else {
+                    status = type; // 'monthly', 'weekly', 'special'
+                    if (type === 'monthly') {
+                        badgeText = '月赛';
+                        badgeClass = 'badge-monthly';
+                    } else if (type === 'weekly') {
+                        badgeText = '周赛';
+                        badgeClass = 'badge-weekly';
+                    } else if (type === 'special') {
+                        badgeText = '活动赛';
+                        badgeClass = 'badge-special';
+                    }
                 }
+                
+                card.setAttribute('data-status', status);
+                const badge = card.querySelector('.contest-badge');
+                badge.textContent = badgeText;
+                badge.className = 'contest-badge ' + badgeClass;
             });
         }
         
