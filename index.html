@@ -135,6 +135,33 @@
             margin: 0 auto 2.5rem;
         }
 
+        .current-time {
+            margin-bottom: 1rem;
+        }
+
+        .timer-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .timer-item {
+            text-align: center;
+        }
+
+        .timer-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e40af;
+            font-family: 'Courier New', monospace;
+        }
+
+        .timer-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 0.3rem;
+        }
+
         /* 筛选选项卡 */
         .filter-tabs {
             display: flex;
@@ -626,6 +653,34 @@
             <div class="container">
                 <h1>CookieOI</h1>
                 <p class="hero-subtitle">Cookie Online Judge 比赛平台</p>
+                <div class="current-time">
+                    <div class="timer-container">
+                        <div class="timer-item">
+                            <div class="timer-value" id="year">--</div>
+                            <div class="timer-label">年</div>
+                        </div>
+                        <div class="timer-item">
+                            <div class="timer-value" id="month">--</div>
+                            <div class="timer-label">月</div>
+                        </div>
+                        <div class="timer-item">
+                            <div class="timer-value" id="day">--</div>
+                            <div class="timer-label">日</div>
+                        </div>
+                        <div class="timer-item">
+                            <div class="timer-value" id="hour">--</div>
+                            <div class="timer-label">时</div>
+                        </div>
+                        <div class="timer-item">
+                            <div class="timer-value" id="minute">--</div>
+                            <div class="timer-label">分</div>
+                        </div>
+                        <div class="timer-item">
+                            <div class="timer-value" id="second">--</div>
+                            <div class="timer-label">秒</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -981,7 +1036,7 @@
         
         // 更新比赛状态标签
         function updateContestStatus() {
-            const now = new Date('2026-04-21');
+            const now = new Date();
             document.querySelectorAll('.contest-card').forEach(card => {
                 const startStr = card.getAttribute('data-start');
                 const endStr = card.getAttribute('data-end');
@@ -1028,6 +1083,21 @@
         
         // 初始调用
         updateContestStatus();
+        
+        // 更新当前时间显示
+        function updateCurrentTime() {
+            const now = new Date();
+            document.getElementById('year').textContent = now.getFullYear();
+            document.getElementById('month').textContent = (now.getMonth() + 1).toString().padStart(2, '0');
+            document.getElementById('day').textContent = now.getDate().toString().padStart(2, '0');
+            document.getElementById('hour').textContent = now.getHours().toString().padStart(2, '0');
+            document.getElementById('minute').textContent = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('second').textContent = now.getSeconds().toString().padStart(2, '0');
+        }
+        
+        // 初始调用并每秒更新
+        updateCurrentTime();
+        setInterval(updateCurrentTime, 1000);
         
         // 平滑滚动
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
